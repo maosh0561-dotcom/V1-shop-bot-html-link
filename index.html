@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<title>MXT PREMIUM SHOP 🛍️</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{overscroll-behavior-y:none}
+body{margin:0;font-family:Arial,sans-serif;color:#171936;background:linear-gradient(125deg,#f4c8eb,#b9d2ff,#baf5ec,#fff0ca);min-height:100vh}
+.app{max-width:700px;margin:auto;padding:18px 14px 110px}
+header{display:flex;align-items:center;gap:12px;margin:10px 0 25px}
+.logo{background:white;border-radius:50%;padding:17px;font-weight:bold;box-shadow:0 5px 15px #7775}
+h2{font-size:26px}.page{display:none;animation:show .3s}.page.active{display:block}
+@keyframes show{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.card{background:#ffffffb9;border:1px solid white;border-radius:25px;padding:20px;margin:14px 0;box-shadow:0 10px 30px #6576a522}
+input,select,textarea{width:100%;padding:16px;border:1px solid white;border-radius:16px;margin:7px 0;background:#ffffffbd;font-size:16px;color:#171936;outline:none}
+textarea{min-height:120px;resize:vertical}
+button{border:0;border-radius:16px;padding:15px;cursor:pointer;font-size:15px}
+.primary{background:linear-gradient(110deg,#2865e8,#a34fe8);color:white;width:100%;font-weight:bold}
+.secondary{background:#ffffffc9;color:#171936;width:100%;font-weight:bold}
+.product{display:flex;align-items:center;gap:12px;padding:18px;margin:14px 0;border-radius:25px;border:2px solid white;color:white;cursor:pointer;box-shadow:0 10px 25px #6576a522}
+.product:nth-child(odd){background:linear-gradient(110deg,#e85eb5,#a65af0)}.product:nth-child(even){background:linear-gradient(110deg,#15b7ce,#4384ef)}
+.product .emoji{font-size:32px;background:#ffffffd9;padding:12px;border-radius:17px}.product .info{flex:1;min-width:0}.product small{display:block;margin-top:7px}.price{font-weight:bold;white-space:nowrap}
+.category{padding:27px;border-radius:27px;margin:15px 0;background:linear-gradient(110deg,#e85eb5,#a65af0);color:white;font-size:25px;font-weight:bold;cursor:pointer;border:2px solid white}
+.category:nth-of-type(even){background:linear-gradient(110deg,#ffdf64,#efa51e);color:#222}
+.balance{background:linear-gradient(110deg,#6188ee,#a13de0,#ff7b43);color:white;padding:25px;border-radius:27px}.balance strong{font-size:40px;display:block;margin:12px 0}
+.nav{position:fixed;bottom:calc(12px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:min(670px,95%);display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:#ffffffed;padding:8px;border-radius:28px;box-shadow:0 10px 30px #6576a533;z-index:5}
+.nav button{background:transparent;color:#777;font-size:13px}.nav button.active{background:linear-gradient(110deg,#dc43b3,#a74ee8);color:white}.nav span{display:block;font-size:23px;margin-bottom:5px}
+.muted{color:#85869d}.row{display:flex;gap:10px}.row>*{flex:1;min-width:0}
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#20213c;color:white;padding:13px 18px;border-radius:15px;display:none;z-index:999;max-width:90%;text-align:center;box-shadow:0 10px 30px #0004}
+.item{background:#ffffffa8;padding:13px;border-radius:15px;margin:10px 0;overflow-wrap:anywhere}
+.bigBack{background:#ffffffc9;color:#171936;font-weight:bold;width:100%;margin-bottom:18px}
+.detailHero{background:#ffffffc9;border:1px solid white;border-radius:30px;padding:30px;box-shadow:0 10px 30px #6576a522}
+.detailEmoji{font-size:70px;text-align:center;margin-bottom:10px}.detailTitle{font-size:42px;margin:10px 0;line-height:1.1}.detailCategory{font-size:22px;color:#85869d;margin-bottom:20px}
+.detailRow{display:flex;justify-content:space-between;gap:15px;padding:18px 0;border-bottom:1px solid #ffffff}.detailRow:last-child{border-bottom:0}
+.detailPrice{font-size:30px;font-weight:bold}.stockBox,.descriptionBox,.balanceBox{background:#ffffffc9;border-radius:25px;padding:22px;margin:18px 0}
+.stockAvailable{color:#4d9d35;font-size:25px;font-weight:bold}.stockEmpty{color:#d53d55;font-size:22px;font-weight:bold}
+.buyButton{background:linear-gradient(110deg,#2865e8,#a34fe8);color:white;width:100%;font-size:21px;font-weight:bold;border:3px solid #f0b900;padding:18px}.buyButton:disabled{opacity:.55;cursor:not-allowed}
+.balanceAmount{font-size:44px;font-weight:bold;margin:10px 0;color:#171936}
+.deliverySuccess{text-align:center;background:#ffffffc9;border-radius:30px;padding:28px;border:1px solid white;box-shadow:0 10px 30px #6576a522}
+.successIcon{font-size:65px}.deliveryField{background:#ffffffd9;border-radius:18px;padding:17px;margin:12px 0;text-align:left}
+.deliveryFieldLabel{font-weight:bold;font-size:16px;color:#666b84;margin-bottom:7px}.deliveryFieldValue{font-size:18px;overflow-wrap:anywhere;word-break:break-word}
+.smallButton{padding:10px 14px;border-radius:12px}.danger{background:#e74c5d;color:white}.success{background:#31a35b;color:white}
+.authSwitch{text-align:center;margin-top:18px}.linkButton{background:none;border:0;padding:5px;color:#5c43d7;font-weight:bold;font-size:16px}
+.orderStatus{display:inline-block;padding:6px 10px;border-radius:10px;background:#fff;margin-top:7px;font-weight:bold}
+.loading{text-align:center;padding:30px;color:#777}.notice{background:#fff9d8;border-radius:18px;padding:14px;margin:12px 0;color:#655500}
+.fileBox{background:#ffffffd9;border:2px solid white;border-radius:22px;padding:18px;margin:18px 0;text-align:left}
+.fileIcon{font-size:42px;margin-bottom:8px}.fileName{font-weight:bold;font-size:18px;overflow-wrap:anywhere;word-break:break-word}
+.fileInfo{color:#777;margin-top:6px;line-height:1.5}.downloadButton{background:linear-gradient(110deg,#2865e8,#a34fe8);color:white;width:100%;font-size:18px;font-weight:bold;margin-top:12px}
+.copyDeliveryButton{background:#fff;color:#171936;width:100%;font-weight:bold;margin-top:10px}
+.deliveryNotice{background:#e8fff0;color:#216b3b;border-radius:18px;padding:14px;margin:14px 0;text-align:left}
+
+/* Updated Account & History panels */
+.panelHero{background:linear-gradient(120deg,#6b75ed,#a34fe8,#e65cae);color:white;padding:25px;border-radius:25px;margin:15px 0;box-shadow:0 10px 25px #6576a533}
+.panelHero strong{display:block;font-size:36px;margin:12px 0}
+.panelCard{background:#ffffffc9;border:1px solid white;border-radius:23px;padding:19px;margin:15px 0;box-shadow:0 8px 22px #6576a522}
+.panelCard h3{margin:0 0 12px}.panelAction{width:100%;background:#fff;color:#242444;border:1px solid #e9e7fa;border-radius:15px;padding:15px;margin:7px 0;text-align:left;font-weight:bold}
+.panelAction span{float:right}.panelStats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:15px 0}
+.statTile{background:#ffffffd9;border:1px solid white;border-radius:19px;padding:17px;min-width:0}
+.statTile small{display:block;color:#777;margin-bottom:9px}.statTile strong{font-size:25px;overflow-wrap:anywhere}
+.historyTabs{display:flex;gap:8px;margin:15px 0}.historyTabs button{flex:1;background:#ffffffc9;color:#555;font-weight:bold}
+.historyTabs button.active{background:linear-gradient(110deg,#dc43b3,#a74ee8);color:white}
+.recordItem{background:#ffffffd9;border:1px solid white;border-radius:17px;padding:15px;margin:10px 0;overflow-wrap:anywhere}
+.recordTop{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.recordAmount{font-size:19px;font-weight:bold}.recordMeta{color:#777;font-size:13px;margin-top:7px}
+.statusBadge{display:inline-block;padding:6px 10px;border-radius:10px;background:#eee;font-size:12px;font-weight:bold}
+.statusBadge.completed,.statusBadge.approved{background:#d9f8e3;color:#218348}
+.statusBadge.pending{background:#fff1c9;color:#946b00}.statusBadge.rejected,.statusBadge.failed{background:#ffe0e4;color:#c02d45}
+.referralCode{background:#f0eaff;border:1px dashed #a58be8;border-radius:14px;padding:14px;overflow-wrap:anywhere;font-weight:bold;margin:12px 0}
+.supportLink{display:block;text-decoration:none;background:#fff;color:#242444;border:1px solid #e9e7fa;border-radius:15px;padding:15px;margin:9px 0;font-weight:bold}
+.resellerStatus{padding:13px;background:#f0eaff;border-radius:14px;margin-top:10px;font-weight:bold}
+@media(max-width:520px){.row{flex-direction:column}.detailTitle{font-size:34px}.detailPrice{font-size:26px}.balanceAmount{font-size:38px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="logo">MXT</div><h2>MXT PREMIUM SHOP 🛍️</h2></header>
+
+<section id="loginPage" class="page active"><div class="card">
+<h2>Welcome 👋</h2><p class="muted">Login to continue to MXT Premium Shop.</p>
+<input id="loginEmail" type="email" placeholder="Email Address" autocomplete="email">
+<input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password">
+<button class="primary" onclick="window.loginUser()">Login</button>
+<div class="authSwitch"><span class="muted">Don't have an account?</span><button class="linkButton" onclick="window.showRegister()">Create Account</button></div>
+</div></section>
+
+<section id="registerPage" class="page"><div class="card">
+<h2>Create Account 📝</h2><p class="muted">Register a new MXT Premium Shop account.</p>
+<input id="registerFirstName" type="text" placeholder="First Name" autocomplete="given-name">
+<input id="registerLastName" type="text" placeholder="Last Name" autocomplete="family-name">
+<input id="registerEmail" type="email" placeholder="Email Address" autocomplete="email">
+<input id="registerPassword" type="password" placeholder="Password" autocomplete="new-password">
+<input id="registerConfirmPassword" type="password" placeholder="Confirm Password" autocomplete="new-password">
+<button class="primary" onclick="window.registerUser()">Create Account</button>
+<div class="authSwitch"><span class="muted">Already have an account?</span><button class="linkButton" onclick="window.showLogin()">Login</button></div>
+</div></section>
+
+<section id="shop" class="page">
+<h2>📁 Categories</h2>
+<button class="primary" onclick="go('history')">🎁 View My Orders</button>
+<button class="primary" style="margin-top:10px;background:#ffffffb9;color:#222" onclick="toast('Proxy checker will be connected separately')">🔎 Proxy Checker</button>
+<div class="category" onclick="window.openCategory('Proxy')">🗄️ Proxy</div>
+<div class="category" onclick="window.openCategory('VPN')">🛡️ VPN</div>
+</section>
+
+<section id="products" class="page"><h2 id="categoryTitle">Products</h2>
+<button class="bigBack" onclick="go('shop')">← Back to Categories</button>
+<div id="productList"><div class="loading">Loading...</div></div></section>
+
+<section id="productDetails" class="page"><button class="bigBack" onclick="window.backToProducts()">← Back to Products</button>
+<h2>📦 Product Details</h2><div id="productDetailsContent"><div class="loading">Loading...</div></div></section>
+
+<section id="delivery" class="page"><h2>🎉 Delivery</h2><div id="deliveryContent"><div class="loading">Loading...</div></div></section>
+
+<section id="deposit" class="page"><h2>💳 Deposit</h2>
+<div class="card"><div class="row"><button class="primary" onclick="payment('Bkash')">💗 Bkash</button><button class="primary" onclick="payment('Nagad')">🟠 Nagad</button></div>
+<h3 id="paymentName">Bkash</h3><p class="muted">Send Money To</p><h2 id="paymentNumber">Loading...</h2>
+<button onclick="copyNumber()">Copy Number</button><p class="muted" id="minimum">Minimum 20 BDT</p></div>
+<div class="card"><label>Amount sent</label><input id="depositAmount" type="number" placeholder="Amount" min="1">
+<label>Transaction ID</label><input id="trxId" placeholder="TrxID">
+<button class="primary" onclick="sendDeposit()">Submit Deposit</button></div>
+</section>
+
+<section id="history" class="page">
+<h2>📊 My History</h2>
+<button class="primary" onclick="go('history')">🎁 View My Orders</button>
+<button class="primary" style="margin-top:10px;background:#ffffffb9;color:#222" onclick="toast('Proxy checker will be connected separately')">🔎 Proxy Checker</button>
+<div class="panelStats">
+<div class="statTile"><small>📦 Total Orders</small><strong id="statOrders">0</strong></div>
+<div class="statTile"><small>💰 Total Deposits</small><strong id="statDeposits">0 BDT</strong></div>
+<div class="statTile"><small>⏳ Pending Deposits</small><strong id="statPending">0 BDT</strong></div>
+<div class="statTile"><small>❌ Rejected</small><strong id="statRejected">0</strong></div>
+</div>
+<div class="panelCard"><h3>My History</h3>
+<div class="historyTabs"><button id="ordersTab" class="active" onclick="switchHistoryTab('orders')">📦 Orders</button><button id="depositsTab" onclick="switchHistoryTab('deposits')">💳 Deposits</button></div>
+<div id="ordersList">Loading...</div><div id="depositsList" style="display:none">Loading...</div>
+</div></section>
+
+<section id="account" class="page">
+<h2>👤 My Account</h2>
+<div class="panelHero">Balance<strong id="balance">0 BDT</strong><span id="userInfo"></span></div>
+<div class="panelCard"><h3>📦 Orders & Tools</h3>
+<button class="panelAction" onclick="go('history')">View My Orders <span>›</span></button>
+<button class="panelAction" onclick="toast('Proxy checker will be connected separately')">🔎 Proxy Checker <span>›</span></button></div>
+<div class="panelCard"><h3>🎁 Referral Program</h3><p class="muted">Invite friends and earn referral bonuses.</p>
+<div class="panelStats"><div class="statTile"><small>Referred Users</small><strong id="referralCount">0</strong></div><div class="statTile"><small>Referral Bonus</small><strong id="referralBonus">0 BDT</strong></div></div>
+<p class="muted">Your Referral Code</p><div class="referralCode" id="referralCode">Loading...</div>
+<div class="row"><button class="primary" onclick="copyReferral()">Copy</button><button class="secondary" onclick="shareReferral()">Share</button></div></div>
+<div class="panelCard"><h3>🆘 Support</h3>
+<a class="supportLink" href="https://t.me/mrmostakim_dev" target="_blank" rel="noopener">AI Support <span style="float:right">›</span></a>
+<a class="supportLink" href="https://t.me/mrmostakim_dev" target="_blank" rel="noopener">👨‍💻 Admin / Telegram Support <span style="float:right">›</span></a></div>
+<div class="panelCard"><h3>🏪 Reseller Program</h3><p class="muted">Apply to become a reseller and grow your business.</p>
+<div class="resellerStatus" id="resellerStatus">Checking application status...</div></div>
+<div class="panelCard"><button class="primary" onclick="logout()">Logout</button></div>
+</section>
+</div>
+
+<nav class="nav" id="nav" style="display:none">
+<button class="active" onclick="go('shop',this)"><span>🛍️</span>Shop</button>
+<button onclick="go('deposit',this)"><span>💳</span>Deposit</button>
+<button onclick="go('history',this)"><span>📊</span>History</button>
+<button onclick="go('account',this)"><span>👤</span>Account</button>
+</nav>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  const tg=window.Telegram&&window.Telegram.WebApp;
+  if(!tg)return;
+  window.__tg=tg;
+  tg.ready();tg.expand();
+  try{tg.setHeaderColor('#b9d2ff');tg.setBackgroundColor('#b9d2ff');}catch(e){}
+  try{tg.disableVerticalSwipes&&tg.disableVerticalSwipes();}catch(e){}
+  const parent={products:'shop',productDetails:'products',delivery:'shop',registerPage:'loginPage'};
+  const active=()=>{const a=document.querySelector('.page.active');return a?a.id:''};
+  const upd=()=>{parent[active()]?tg.BackButton.show():tg.BackButton.hide()};
+  tg.BackButton.onClick(function(){
+    const id=active();
+    if(id==='productDetails')return window.backToProducts();
+    if(id==='registerPage')return window.showLogin();
+    if(parent[id])return window.go(parent[id]);
+  });
+  new MutationObserver(upd).observe(document.body,{subtree:true,attributes:true,attributeFilter:['class']});
+  document.addEventListener('click',function(e){
+    const a=e.target.closest('a.supportLink');
+    if(a&&a.href.indexOf('https://t.me/')===0){e.preventDefault();tg.openTelegramLink(a.href)}
+  });
+})();
+</script>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,onAuthStateChanged,signOut,updateProfile} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getDatabase,ref,get,set,push,update,runTransaction} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig={apiKey:"AIzaSyCfllEAkALTD3WV_DGNWIfYu88FzQ6BI7o",authDomain:"shop-bot-17648.firebaseapp.com",databaseURL:"https://shop-bot-17648-default-rtdb.firebaseio.com",projectId:"shop-bot-17648",storageBucket:"shop-bot-17648.firebasestorage.app",messagingSenderId:"896204442555",appId:"1:896204442555:web:86915a10d226fb2913129e",measurementId:"G-N586RELZCK"};
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getDatabase(app);
+let currentUser=null,currentCategory="Proxy",currentPayment="Bkash",settings={},currentProductId=null,currentProduct=null,currentDelivery=null,purchaseBusy=false;
+
+window.__copy=async function(text){
+  try{await navigator.clipboard.writeText(text);return true}catch(e){}
+  try{const t=document.createElement('textarea');t.value=text;t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);t.select();const ok=document.execCommand('copy');t.remove();return ok}catch(e){return false}
+};
+window.toast=function(message){const t=document.getElementById("toast");t.textContent=message;t.style.display="block";clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>t.style.display="none",3500)};
+function friendlyError(error){const code=error?.code||"",message=error?.message||"";if(code==="auth/email-already-in-use")return"This email is already registered.";if(code==="auth/invalid-email")return"Please enter a valid email address.";if(code==="auth/weak-password")return"Password should be at least 6 characters.";if(code==="auth/invalid-credential")return"Incorrect email or password.";if(code==="auth/user-not-found")return"No account found with this email.";if(code==="auth/wrong-password")return"Incorrect password.";if(code==="PERMISSION_DENIED")return"Firebase permission denied. Please check Database Rules.";return message||"Something went wrong."}
+window.go=function(id,btn){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));const target=document.getElementById(id);if(target)target.classList.add("active");document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));if(btn)btn.classList.add("active");if(id==="history")loadHistory();if(id==="account")loadProfile();if(id==="deposit"||id==="shop")loadSettings();window.scrollTo({top:0,behavior:"smooth"})};
+window.showLogin=function(){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById("loginPage").classList.add("active");document.getElementById("nav").style.display="none"};
+window.showRegister=function(){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById("registerPage").classList.add("active");document.getElementById("nav").style.display="none"};
+
+async function ensureProfile(user,firstName="",lastName=""){const userRef=ref(db,"users/"+user.uid),snapshot=await get(userRef);if(!snapshot.exists()){const fullName=`${firstName} ${lastName}`.trim()||user.displayName||"Customer";await set(userRef,{firstName:firstName||"",lastName:lastName||"",name:fullName,email:user.email||"",phone:user.phoneNumber||"",balance:0,status:"active",createdAt:Date.now()})}else{const profile=snapshot.val()||{};if(String(profile.status||"active").toLowerCase()==="blocked"){await signOut(auth);throw new Error("Your account is blocked.")}}}
+window.registerUser=async function(){try{const firstName=document.getElementById("registerFirstName").value.trim(),lastName=document.getElementById("registerLastName").value.trim(),email=document.getElementById("registerEmail").value.trim().toLowerCase(),password=document.getElementById("registerPassword").value,confirmPassword=document.getElementById("registerConfirmPassword").value;if(!firstName)return toast("Enter your first name.");if(!lastName)return toast("Enter your last name.");if(!email)return toast("Enter your email.");if(!password)return toast("Enter a password.");if(password.length<6)return toast("Password must be at least 6 characters.");if(password!==confirmPassword)return toast("Passwords do not match.");const credential=await createUserWithEmailAndPassword(auth,email,password),fullName=`${firstName} ${lastName}`.trim();try{await updateProfile(credential.user,{displayName:fullName})}catch(_){}await ensureProfile(credential.user,firstName,lastName);toast("Account created successfully!")}catch(error){console.error("REGISTER ERROR:",error);toast(friendlyError(error))}};
+window.loginUser=async function(){try{const email=document.getElementById("loginEmail").value.trim().toLowerCase(),password=document.getElementById("loginPassword").value;if(!email)return toast("Enter your email.");if(!password)return toast("Enter your password.");await signInWithEmailAndPassword(auth,email,password)}catch(error){console.error("LOGIN ERROR:",error);toast(friendlyError(error))}};
+window.logout=async function(){try{await signOut(auth)}catch(error){toast(friendlyError(error))}};
+onAuthStateChanged(auth,async user=>{if(!user){currentUser=null;document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById("loginPage").classList.add("active");document.getElementById("nav").style.display="none";return}try{await ensureProfile(user);currentUser=user;document.getElementById("nav").style.display="grid";await loadSettings();await refreshBalance();go("shop",document.querySelector(".nav button"))}catch(error){console.error("AUTH ERROR:",error);toast(friendlyError(error))}});
+window.openCategory=async function(category){currentCategory=category;document.getElementById("categoryTitle").textContent=category;document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById("products").classList.add("active");await loadProducts();window.scrollTo({top:0,behavior:"smooth"})};
+function isProductActive(product){if(!product)return false;const value=product.active;return value===true||value===1||String(value).toLowerCase()==="true"}
+function isAvailableStockItem(item){if(!item)return false;const status=String(item.status??"available").trim().toLowerCase();return !["sold","reserved","used","unavailable","disabled"].includes(status)}
+async function getRealAvailableStock(productId){const snapshot=await get(ref(db,`products/${productId}/stockItems`));if(!snapshot.exists())return[];return Object.entries(snapshot.val()||{}).filter(([id,item])=>isAvailableStockItem(item)).map(([id,item])=>({id,...item}))}
+async function syncProductStockCount(productId){const available=await getRealAvailableStock(productId),count=available.length;try{await update(ref(db,`products/${productId}`),{stockCount:count,updatedAt:Date.now()})}catch(error){console.warn("STOCK COUNT CACHE UPDATE FAILED:",error)}return count}
+async function loadProducts(){const list=document.getElementById("productList");list.innerHTML='<div class="loading">Loading...</div>';try{const snapshot=await get(ref(db,"products")),products=snapshot.val()||{};list.innerHTML="";let count=0;for(const[id,product]of Object.entries(products)){if(!product||String(product.category||"").trim().toLowerCase()!==String(currentCategory).trim().toLowerCase()||!isProductActive(product))continue;let realStock=0;try{realStock=await syncProductStockCount(id)}catch(error){console.error("STOCK COUNT ERROR:",id,error)}count++;const div=document.createElement("div");div.className="product";const emoji=document.createElement("div");emoji.className="emoji";emoji.textContent=product.emoji||"📦";const info=document.createElement("div");info.className="info";const title=document.createElement("b");title.textContent=product.name||"Product";const stock=document.createElement("small");stock.textContent=realStock>0?`🟢 ${realStock} stock available`:"🔴 Out of stock";info.append(title,stock);const price=document.createElement("div");price.className="price";price.textContent=`${Number(product.price||0)} BDT`;div.append(emoji,info,price);div.onclick=()=>openProductDetails(id,product);list.append(div)}if(!count)list.innerHTML='<div class="card"><p>No products available.</p></div>'}catch(error){console.error("LOAD PRODUCTS ERROR:",error);list.innerHTML='<div class="card"><p>Could not load products.</p></div>';toast(friendlyError(error))}}
+async function openProductDetails(productId,product){currentProductId=productId;currentProduct=product;document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById("productDetails").classList.add("active");const box=document.getElementById("productDetailsContent");box.innerHTML='<div class="loading">Loading product...</div>';window.scrollTo({top:0,behavior:"smooth"});try{const snap=await get(ref(db,`products/${productId}`));if(!snap.exists()){box.innerHTML='<div class="card">Product not found.</div>';return}currentProduct=snap.val();const stock=await syncProductStockCount(productId);renderProductDetails(productId,currentProduct,stock)}catch(error){console.error("PRODUCT DETAILS ERROR:",error);box.innerHTML='<div class="card">Could not load product.</div>';toast(friendlyError(error))}}
+function renderProductDetails(productId,product,stockCount){const box=document.getElementById("productDetailsContent");box.innerHTML="";const hero=document.createElement("div");hero.className="detailHero";const emoji=document.createElement("div");emoji.className="detailEmoji";emoji.textContent=product.emoji||"📦";const title=document.createElement("div");title.className="detailTitle";title.textContent=product.name||"Product";const category=document.createElement("div");category.className="detailCategory";category.textContent=product.category||"Product";const priceRow=document.createElement("div");priceRow.className="detailRow";const pl=document.createElement("span");pl.textContent="Price";const price=document.createElement("span");price.className="detailPrice";price.textContent=`${Number(product.price||0)} BDT`;priceRow.append(pl,price);const stockRow=document.createElement("div");stockRow.className="detailRow";const sl=document.createElement("span");sl.textContent="Available Stock";const sn=document.createElement("strong");sn.textContent=stockCount;stockRow.append(sl,sn);const stockBox=document.createElement("div");stockBox.className="stockBox";const st=document.createElement("div");st.className=stockCount>0?"stockAvailable":"stockEmpty";st.textContent=stockCount>0?`🟢 ${stockCount} stock available`:"🔴 No stock available";stockBox.append(st);const descBox=document.createElement("div");descBox.className="descriptionBox";const dh=document.createElement("h3");dh.textContent="Description";const desc=document.createElement("p");desc.className="muted";desc.textContent=product.description||"No description available.";descBox.append(dh,desc);const buy=document.createElement("button");buy.className="buyButton";buy.textContent="🛒 Buy Now";if(stockCount<=0){buy.disabled=true;buy.textContent="🔴 Out of Stock"}else buy.onclick=()=>window.buyProduct(productId);const balanceBox=document.createElement("div");balanceBox.className="balanceBox";const bh=document.createElement("h3");bh.textContent="Your Balance";const ba=document.createElement("div");ba.className="balanceAmount";ba.id="detailsBalance";ba.textContent="Loading...";const req=document.createElement("p");req.className="muted";req.textContent=`Required: ${Number(product.price||0)} BDT`;balanceBox.append(bh,ba,req);hero.append(emoji,title,category,priceRow,stockRow,stockBox,descBox,buy,balanceBox);box.append(hero);loadDetailsBalance()}
+async function getUserBalance(uid){const snap=await get(ref(db,`users/${uid}/balance`)),raw=snap.val();if(raw===null||raw===undefined||raw==="")return 0;const balance=Number(raw);if(!Number.isFinite(balance))throw new Error("Invalid account balance.");return balance}
+async function loadDetailsBalance(){if(!currentUser)return;try{const balance=await getUserBalance(currentUser.uid),el=document.getElementById("detailsBalance");if(el)el.textContent=`${balance} BDT`}catch(error){const el=document.getElementById("detailsBalance");if(el)el.textContent="Unable to read"}}
+window.backToProducts=function(){window.openCategory(currentCategory)};
+async function claimRealStock(productId,uid,orderId){const stockRef=ref(db,`products/${productId}/stockItems`),snapshot=await get(stockRef);if(!snapshot.exists())return null;const candidates=Object.entries(snapshot.val()||{}).filter(([id,item])=>isAvailableStockItem(item)).map(([id])=>id);for(const itemId of candidates){const itemRef=ref(db,`products/${productId}/stockItems/${itemId}`);const tx=await runTransaction(itemRef,current=>{if(current===null)return current;if(!isAvailableStockItem(current))return;return{...current,status:"sold",soldTo:uid,orderId,soldAt:Date.now()}});if(tx.committed)return{itemId,...tx.snapshot.val()}}return null}
+async function releaseStock(productId,itemId,uid,orderId){if(!itemId)return;await runTransaction(ref(db,`products/${productId}/stockItems/${itemId}`),current=>{if(current===null)return current;if(current.status==="sold"&&current.soldTo===uid&&current.orderId===orderId)return{...current,status:"available",soldTo:null,orderId:null,soldAt:null};return current})}
+async function chargeBalance(uid,amount){const tx=await runTransaction(ref(db,`users/${uid}/balance`),current=>{if(current===null)return current;const balance=Number(current??0);if(!Number.isFinite(balance)||balance<amount)return;return balance-amount});return tx.committed}
+async function refundBalance(uid,amount){await runTransaction(ref(db,`users/${uid}/balance`),current=>{if(current===null)return current;const balance=Number(current??0);if(!Number.isFinite(balance))return;return balance+Number(amount||0)})}
+window.buyProduct=async function(productId){if(purchaseBusy)return toast("Purchase is already processing...");if(!currentUser)return toast("Please login first.");purchaseBusy=true;let orderId=null,claimedStock=null,balanceCharged=false,amountCharged=0,purchaseFinalized=false;try{const productSnapshot=await get(ref(db,`products/${productId}`));if(!productSnapshot.exists())throw new Error("Product not found.");const product=productSnapshot.val();if(!isProductActive(product))throw new Error("This product is not available.");const price=Number(product.price||0);if(!Number.isFinite(price)||price<=0)throw new Error("Invalid product price.");const balance=await getUserBalance(currentUser.uid);if(balance<price)throw new Error(`Insufficient balance. You have ${balance} BDT but ${price} BDT is required.`);const availableStock=await getRealAvailableStock(productId);if(!availableStock.length){try{await syncProductStockCount(productId)}catch(_){}throw new Error("No stock is currently available. Please try again.")}const orderRef=push(ref(db,"orders"));orderId=orderRef.key;const fieldOrder=Array.isArray(product.fields)?product.fields:[];await set(orderRef,{userId:currentUser.uid,productId,productName:product.name||"Product",price,fieldOrder,status:"processing",delivered:false,createdAt:Date.now()});claimedStock=await claimRealStock(productId,currentUser.uid,orderId);if(!claimedStock){await update(ref(db,`orders/${orderId}`),{status:"failed",failureReason:"Stock unavailable",updatedAt:Date.now()});try{await syncProductStockCount(productId)}catch(_){}throw new Error("Stock was just purchased by another customer. Please try again.")}const charged=await chargeBalance(currentUser.uid,price);if(!charged){await releaseStock(productId,claimedStock.itemId,currentUser.uid,orderId);await update(ref(db,`orders/${orderId}`),{status:"failed",failureReason:"Insufficient balance",updatedAt:Date.now()});throw new Error("Your balance is insufficient. Stock was released and no money was charged.")}balanceCharged=true;amountCharged=price;const delivery=claimedStock.fields||claimedStock.data||{};await update(ref(db,`orders/${orderId}`),{status:"completed",delivered:true,delivery,stockItemId:claimedStock.itemId,fieldOrder,deliveredAt:Date.now(),updatedAt:Date.now()});purchaseFinalized=true;let remainingStock="—";try{remainingStock=await syncProductStockCount(productId)}catch(_){}const deliveryData={orderId,productId,productName:product.name||"Product",price,delivery,fieldOrder,stockRemaining:remainingStock};currentDelivery=deliveryData;renderDeliveryPage(deliveryData);document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById("delivery").classList.add("active");await refreshBalance();window.scrollTo({top:0,behavior:"smooth"});toast("Purchase successful!")}catch(error){console.error("PURCHASE ERROR:",error);if(balanceCharged&&claimedStock&&orderId&&!purchaseFinalized){try{await releaseStock(productId,claimedStock.itemId,currentUser.uid,orderId);await refundBalance(currentUser.uid,amountCharged);await update(ref(db,`orders/${orderId}`),{status:"failed",refunded:true,failureReason:"Purchase rollback",refundedAt:Date.now(),updatedAt:Date.now()})}catch(rollbackError){console.error("ROLLBACK ERROR:",rollbackError)}}toast(error.message||"Purchase could not be completed. Please try again.")}finally{purchaseBusy=false}};
+function csvEscape(value){const text=String(value??"");return text.includes(",")||text.includes('"')||text.includes("\n")||text.includes("\r")?'"'+text.replace(/"/g,'""')+'"':text}
+function getDeliveryFieldOrder(delivery,fieldOrder){const keys=Object.keys(delivery||{});let order=Array.isArray(fieldOrder)?fieldOrder.filter(field=>keys.includes(field)):[];if(!order.length){const lower=keys.map(k=>k.toLowerCase());if(["proxy","port","username","password"].every(k=>lower.includes(k)))order=["proxy","port","username","password"].filter(k=>keys.includes(k));else if(lower.includes("email")&&lower.includes("password"))order=["email","password"].filter(k=>keys.includes(k));else if(lower.includes("code"))order=keys.filter(k=>k.toLowerCase()==="code")}keys.forEach(k=>{if(!order.includes(k))order.push(k)});return order}
+function createDeliveryCSV(delivery,productName,fieldOrder){if(!delivery||typeof delivery!=="object")throw new Error("Delivery data is missing.");const fields=getDeliveryFieldOrder(delivery,fieldOrder);return[["Product",...fields].map(csvEscape).join(","),[productName||"Product",...fields.map(f=>delivery[f])].map(csvEscape).join(",")].join("\r\n")}
+function safeFileName(name){return String(name||"product").replace(/[^a-z0-9_-]+/gi,"_").replace(/^_+|_+$/g,"")||"product"}
+window.downloadDeliveryCSV=async function(){if(!currentDelivery)return toast("Delivery data not found.");try{const csv=createDeliveryCSV(currentDelivery.delivery,currentDelivery.productName,currentDelivery.fieldOrder),blob=new Blob([new Uint8Array([0xEF,0xBB,0xBF]),csv],{type:"text/csv;charset=utf-8;"}),url=URL.createObjectURL(blob),a=document.createElement("a"),fileName=safeFileName(currentDelivery.productName),orderPart=String(currentDelivery.orderId||"").slice(-8);if(window.__tg&&/android|iphone|ipad/i.test(navigator.userAgent)){await window.__copy(csv);toast("CSV data copied (file download is limited inside Telegram).");return}a.href=url;a.download=`${fileName}_delivery_${orderPart}.csv`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);toast("CSV file downloaded successfully.")}catch(error){console.error("CSV ERROR:",error);toast("CSV file could not be created.")}};
+window.copyDeliveryField=async function(value){try{if(!await window.__copy(String(value??"")))throw 0;toast("Copied successfully.")}catch(error){toast("Copy not supported.")}};
+function renderDeliveryPage(data){currentDelivery=data;const box=document.getElementById("deliveryContent");box.innerHTML="";const wrapper=document.createElement("div");wrapper.className="deliverySuccess";const icon=document.createElement("div");icon.className="successIcon";icon.textContent="🎉";const title=document.createElement("h2");title.textContent="Purchase Successful!";const product=document.createElement("h3");product.textContent=data.productName;const order=document.createElement("p");order.className="muted";order.textContent=`Order ID: ${data.orderId}`;const notice=document.createElement("div");notice.className="deliveryNotice";notice.textContent="✅ Your product has been delivered successfully. Save the CSV file for future use.";const deliveryTitle=document.createElement("h3");deliveryTitle.textContent="📦 Your Delivery";wrapper.append(icon,title,product,order,notice,deliveryTitle);const delivery=data.delivery||{},fields=getDeliveryFieldOrder(delivery,data.fieldOrder);if(!fields.length){const empty=document.createElement("div");empty.className="notice";empty.textContent="Delivery data is empty.";wrapper.append(empty)}else fields.forEach(key=>{const field=document.createElement("div");field.className="deliveryField";const label=document.createElement("div");label.className="deliveryFieldLabel";label.textContent=key;const val=document.createElement("div");val.className="deliveryFieldValue";val.textContent=String(delivery[key]??"");const copy=document.createElement("button");copy.className="copyDeliveryButton";copy.textContent="📋 Copy";copy.onclick=()=>window.copyDeliveryField(delivery[key]);field.append(label,val,copy);wrapper.append(field)});const fileBox=document.createElement("div");fileBox.className="fileBox";const fileIcon=document.createElement("div");fileIcon.className="fileIcon";fileIcon.textContent="📄";const fileName=document.createElement("div");fileName.className="fileName";fileName.textContent=`${safeFileName(data.productName)}_delivery_${String(data.orderId||"").slice(-8)}.csv`;const fileInfo=document.createElement("div");fileInfo.className="fileInfo";fileInfo.textContent=`${fields.length} delivery field(s) · CSV format · UTF-8`;const download=document.createElement("button");download.className="downloadButton";download.textContent="⬇️ Download Delivery CSV";download.onclick=()=>window.downloadDeliveryCSV();fileBox.append(fileIcon,fileName,fileInfo,download);wrapper.append(fileBox);const remaining=document.createElement("p");remaining.className="muted";remaining.textContent=`Remaining stock: ${data.stockRemaining??"—"}`;wrapper.append(remaining);const historyButton=document.createElement("button");historyButton.className="primary";historyButton.textContent="📊 View My Orders";historyButton.onclick=()=>go("history");wrapper.append(historyButton);box.append(wrapper)}
+async function loadSettings(){try{const snapshot=await get(ref(db,"settings/shop"));settings=snapshot.val()||{};payment(currentPayment)}catch(error){console.error("SETTINGS ERROR:",error)}}
+window.payment=function(method){currentPayment=method;const paymentName=document.getElementById("paymentName"),paymentNumber=document.getElementById("paymentNumber"),minimum=document.getElementById("minimum");if(paymentName)paymentName.textContent=method;if(paymentNumber)paymentNumber.textContent=method==="Bkash"?(settings.bkashNumber||"01961048571"):(settings.nagadNumber||"01961048571");if(minimum)minimum.textContent=`Minimum ${Number(settings.minimumDeposit||20)} BDT`};
+window.copyNumber=async function(){try{if(!await window.__copy(document.getElementById("paymentNumber").textContent))throw 0;toast("Number copied")}catch(error){toast("Copy not supported")}};
+window.sendDeposit=async function(){if(!currentUser)return toast("Please login first.");const amount=Number(document.getElementById("depositAmount").value),trx=document.getElementById("trxId").value.trim(),minimum=Number(settings.minimumDeposit||20);if(!Number.isFinite(amount)||amount<minimum)return toast(`Minimum deposit is ${minimum} BDT.`);if(!trx)return toast("Enter Transaction ID.");try{const depositRef=push(ref(db,"deposits"));await set(depositRef,{userId:currentUser.uid,amount,trx,method:currentPayment,status:"pending",createdAt:Date.now()});document.getElementById("depositAmount").value="";document.getElementById("trxId").value="";toast("Deposit request submitted!")}catch(error){console.error("DEPOSIT ERROR:",error);toast(friendlyError(error))}};
+
+/* History tab controls and records */
+window.switchHistoryTab=function(tab){const orders=document.getElementById("ordersList"),deposits=document.getElementById("depositsList"),ot=document.getElementById("ordersTab"),dt=document.getElementById("depositsTab");orders.style.display=tab==="orders"?"block":"none";deposits.style.display=tab==="deposits"?"block":"none";ot.classList.toggle("active",tab==="orders");dt.classList.toggle("active",tab==="deposits")};
+async function loadHistory(){if(!currentUser)return;const ordersBox=document.getElementById("ordersList"),depositsBox=document.getElementById("depositsList");ordersBox.textContent="Loading...";depositsBox.textContent="Loading...";try{const [os,ds]=await Promise.all([get(ref(db,"orders")),get(ref(db,"deposits"))]),orders=os.val()||{},deposits=ds.val()||{},myOrders=Object.entries(orders).filter(([id,o])=>o&&o.userId===currentUser.uid).sort((a,b)=>(b[1].createdAt||0)-(a[1].createdAt||0)),myDeposits=Object.entries(deposits).filter(([id,d])=>d&&d.userId===currentUser.uid).sort((a,b)=>(b[1].createdAt||0)-(a[1].createdAt||0));ordersBox.innerHTML="";document.getElementById("statOrders").textContent=myOrders.length;if(!myOrders.length)ordersBox.textContent="No orders yet.";myOrders.forEach(([id,o])=>{const div=document.createElement("div");div.className="recordItem";const top=document.createElement("div");top.className="recordTop";const title=document.createElement("b");title.textContent=o.productName||"Product";const amount=document.createElement("span");amount.className="recordAmount";amount.textContent=Number(o.price||0)+" BDT";top.append(title,amount);const status=document.createElement("span");status.className="statusBadge "+String(o.status||"pending").toLowerCase();status.textContent=o.delivered?"Delivered":(o.status||"Processing");const meta=document.createElement("div");meta.className="recordMeta";meta.textContent="Order ID: "+id+" · "+new Date(o.createdAt||Date.now()).toLocaleString();div.append(top,status,meta);if(o.delivered){const data={orderId:id,productId:o.productId,productName:o.productName,price:o.price,delivery:o.delivery||{},fieldOrder:o.fieldOrder||[],stockRemaining:"—"},view=document.createElement("button");view.className="smallButton success";view.style.marginTop="10px";view.textContent="📦 View Delivery";view.onclick=()=>{currentDelivery=data;renderDeliveryPage(data);document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById("delivery").classList.add("active");window.scrollTo({top:0,behavior:"smooth"})};div.append(view);const csv=document.createElement("button");csv.className="smallButton";csv.style.margin="10px 0 0 8px";csv.textContent="📄 Download CSV";csv.onclick=()=>{currentDelivery=data;window.downloadDeliveryCSV()};div.append(csv)}ordersBox.append(div)});
+depositsBox.innerHTML="";let total=0,pending=0,rejected=0;myDeposits.forEach(([id,d])=>{const amount=Number(d.amount||0),status=String(d.status||"pending").toLowerCase();if(["approved","completed","success"].includes(status))total+=amount;if(status==="pending")pending+=amount;if(status==="rejected")rejected++;const div=document.createElement("div");div.className="recordItem";const top=document.createElement("div");top.className="recordTop";const method=document.createElement("b");method.textContent=d.method||"Deposit";const value=document.createElement("span");value.className="recordAmount";value.textContent=amount+" BDT";top.append(method,value);const badge=document.createElement("span");badge.className="statusBadge "+status;badge.textContent=status;const meta=document.createElement("div");meta.className="recordMeta";meta.textContent="TrxID: "+(d.trx||"—")+" · "+new Date(d.createdAt||Date.now()).toLocaleString();div.append(top,badge,meta);depositsBox.append(div)});if(!myDeposits.length)depositsBox.textContent="No deposits yet.";document.getElementById("statDeposits").textContent=total+" BDT";document.getElementById("statPending").textContent=pending+" BDT";document.getElementById("statRejected").textContent=rejected}catch(error){console.error("HISTORY ERROR:",error);ordersBox.textContent="Could not load orders.";depositsBox.textContent="Could not load deposits."}}
+
+/* Account profile, referral and reseller status */
+async function loadProfile(){if(!currentUser)return;try{const snapshot=await get(ref(db,"users/"+currentUser.uid));if(!snapshot.exists())return;const user=snapshot.val()||{},balance=Number(user.balance??0);document.getElementById("balance").textContent=balance+" BDT";document.getElementById("userInfo").textContent=user.email||currentUser.email||currentUser.uid;document.getElementById("referralCode").textContent=currentUser.uid;document.getElementById("referralCount").textContent=Number(user.referralCount??user.totalReferrals??user.referredUsersCount??0);document.getElementById("referralBonus").textContent=Number(user.referralBonus??user.totalReferralBonus??user.referralEarnings??0)+" BDT";const status=String(user.resellerStatus??(user.isReseller===true?"approved":"not_applied")).toLowerCase(),el=document.getElementById("resellerStatus");if(status==="approved"||status==="active"||user.isReseller===true)el.textContent="✅ Reseller Approved";else if(status==="pending")el.textContent="⏳ Application Pending";else if(status==="rejected")el.textContent="❌ Application Rejected";else el.textContent="Not applied yet"}catch(error){console.error("PROFILE ERROR:",error)}}
+async function refreshBalance(){if(!currentUser)return 0;try{const balance=await getUserBalance(currentUser.uid);const el=document.getElementById("balance");if(el)el.textContent=balance+" BDT";const detail=document.getElementById("detailsBalance");if(detail)detail.textContent=balance+" BDT";return balance}catch(error){console.error("BALANCE ERROR:",error);return 0}}
+window.copyReferral=async function(){if(!currentUser)return;try{if(!await window.__copy(currentUser.uid))throw 0;toast("Referral code copied!")}catch(error){toast("Copy not supported")}};
+window.shareReferral=async function(){if(!currentUser)return;const text="Join MXT PREMIUM SHOP! Use my referral code: "+currentUser.uid;try{if(window.__tg){window.__tg.openTelegramLink("https://t.me/share/url?url="+encodeURIComponent(location.href.split("#")[0])+"&text="+encodeURIComponent(text))}else if(navigator.share)await navigator.share({title:"MXT PREMIUM SHOP",text});else{await window.__copy(text);toast("Referral message copied!")}}catch(error){if(error.name!=="AbortError")toast("Unable to share right now.")}};
+setInterval(()=>{if(currentUser)refreshBalance()},5000);
+</script>
+</body>
+</html>
